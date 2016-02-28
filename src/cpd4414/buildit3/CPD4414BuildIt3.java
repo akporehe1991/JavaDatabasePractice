@@ -30,7 +30,8 @@ public class CPD4414BuildIt3 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        doStatement();
+        //doStatement();
+        displayRow("2");
     }
 
     public static Connection getConnection() {
@@ -53,6 +54,49 @@ public class CPD4414BuildIt3 {
     }
     
     public static void doStatement() {
-         
+        try{
+            Connection con = getConnection();
+            String query = "SELECT * FROM product";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            // Above 3 lines same as line below:
+//            ResultSet rs = con.createStatement().executeQuery("SELECT * FROM product");
+            
+            System.out.printf("%s\t%s\t%s\n","Name","Description","Quantity"); 
+            System.out.println("(------------------------------)");
+            while(rs.next()){
+                String name = rs.getString("Name");
+                String des = rs.getString("Description");
+                String quan = rs.getString("Quantity");
+                
+                System.out.printf("%s\t%s\t\t%s\n",name, des, quan );
+            }
+            con.close();
+            
+        } catch (SQLException e) {
+            System.out.println("Failure to SELECT: " + e.getMessage());
+        }
+    }
+    
+    public static void displayRow(String id) {
+        try {
+            Connection con = getConnection();
+            String query = "SELECT * FROM  product WHERE ProductID = " + id;
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            System.out.printf("%s\t%s\t%s\t%s\t\n", "ID" ,"Name","Description","Quantity"); 
+            System.out.println("(-------------------------------------------)");
+            
+            while(rs.next()){
+                String prod = rs.getString("ProductID");
+                String name = rs.getString("Name");
+                String des = rs.getString("Description");
+                String quan = rs.getString("Quantity");
+                 
+                System.out.printf("%s\t%s\t%s\t\t%s\n",prod,name, des, quan );
+            }
+        } catch (SQLException e) {
+            System.out.println("Failure to SELECT: " + e.getMessage());
+        }
     }
 }
